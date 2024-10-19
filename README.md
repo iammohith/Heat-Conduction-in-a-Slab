@@ -74,7 +74,7 @@ $$
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/iammohith/Heat-Conduction-in-a-slab.git
+   git clone https://github.com/iammohith/Heat-Conduction-in-a-Slab.git
    ```
    
 2. **Install dependencies**:
