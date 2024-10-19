@@ -4,38 +4,67 @@ Created on Sun Apr 12 23:22:22 2020
 
 @author: Mohith Sai
 """
-""" Let us consider a slab with thickness of L with heat generation Qg
-K thermal conductivity of the material
-and let us consider the case where heat is transffered from two sides of wall
-to surrounding fluid at Tinf for simplicity let us assume that 
-temperature of both surafces are at Tw
-the temperature distributuion over a slab is given by
- T(x) = Qg/8*k*(L**2 - 4*x**2) + Qg*L/2*h + Tinf 
- where h is heat transfer coefficient and at wall it is given by 
- h = Qg*L/2*(thetaW) thetaW is temperature difference"""
+
+# This program calculates the temperature distribution across a slab with heat generation (Qg).
+# Heat is transferred from both sides of the slab to a surrounding fluid at temperature Tinf.
+# Both surfaces of the slab are assumed to be at the same temperature (Tw).
+# The temperature distribution is given by:
+# T(x) = Qg / (8*K) * (L**2 - 4*x**2) + Qg*L / (2*h) + Tinf
+# Where 'h' is the heat transfer coefficient, and is calculated as:
+# h = Qg * L / (2 * thetaW), with thetaW as the temperature difference between Tw and Tinf.
 
 import numpy as np
 import matplotlib.pyplot as plt
 
-Tw = 120 #the wall temperature of the both ends units must be in degC
-Tinf = 35 #the temperature of surrounding fluid units muts be in 
-Qg = 1000 #heat generation units must be in W/m**3
-L = 2 #the length of the slab units must be in meters
-if Tw > Tinf : #if condition for Tw>Tinf
-    thetaW = Tw - Tinf #temperature difference
-elif Tinf > Tw : #if condition for Tinf>Tw
-    thetaW = Tinf - Tw #temperature difference
-h = (Qg*L)/(2*(thetaW)) #convective heat tranfer coeff
-K = 1000 #thermal conductivity units must be in W/m*k
-n = 20 #the number of points
-x = np.linspace(0, L/2, n) #linearlyspaced points
-T = np.ones(n) #preallocating array of ones for temperature
-for i in range(0, n) :
-    T[i] = ((Qg/(8*K))*(L**2 - 4*x[i]**2)) + ((Qg*L)/(2*h)) + Tinf
-print("The temperatures from midplane are:",T)
+# Defining the wall temperature of both ends of the slab (in degrees Celsius)
+Tw = 120  # Wall temperature (degC)
+
+# Temperature of the surrounding fluid (in degrees Celsius)
+Tinf = 35  # Fluid temperature (degC)
+
+# Heat generation rate (in W/m^3)
+Qg = 1000  # Heat generation per unit volume (W/m^3)
+
+# Defining the thickness of the slab (in meters)
+L = 2  # Length of the slab (m)
+
+# Calculate the temperature difference (thetaW) between the wall and the surrounding fluid
+if Tw > Tinf:
+    thetaW = Tw - Tinf  # Tw is higher than Tinf
+else:
+    thetaW = Tinf - Tw  # Tinf is higher than Tw
+
+# Convective heat transfer coefficient (in W/m^2*K)
+h = (Qg * L) / (2 * thetaW)
+
+# Thermal conductivity of the slab material (in W/m*K)
+K = 1000  # Thermal conductivity (W/m*K)
+
+# Number of points along half the slab to compute the temperature (symmetry from midplane)
+n = 20  # Number of points
+
+# Generate n linearly spaced points between 0 and L/2 (since the temperature is symmetric from the midplane)
+x = np.linspace(0, L / 2, n)
+
+# Preallocate an array for the temperature values
+T = np.ones(n)
+
+# Calculate temperature distribution across the slab (from midplane to one side)
+for i in range(n):
+    T[i] = (Qg / (8 * K)) * (L**2 - 4 * x[i]**2) + (Qg * L) / (2 * h) + Tinf
+
+# Display the calculated temperature values
+print("The temperatures from the midplane are:", T)
+
+# Plotting the temperature distribution
 plt.figure(1)
-plt.plot(x,T,color='red', linestyle='dashed', marker='.', markerfacecolor='blue')
-plt.plot(-x,T,color='red', linestyle='dashed', marker='.', markerfacecolor='blue')
-plt.xlabel('Distacnce from mid plane (m)')
-plt.ylabel('Temperature (C)')
-plt.title('Axisyymetrical Temperature Graph')
+plt.plot(x, T, color='red', linestyle='dashed', marker='.', markerfacecolor='blue')  # From midplane to right side
+plt.plot(-x, T, color='red', linestyle='dashed', marker='.', markerfacecolor='blue')  # Symmetry: from midplane to left side
+
+# Adding labels and title to the plot
+plt.xlabel('Distance from midplane (m)')
+plt.ylabel('Temperature (°C)')
+plt.title('Axisymmetrical Temperature Distribution')
+
+# Show the plot
+plt.show()
